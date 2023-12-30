@@ -3,11 +3,11 @@ async function openBilingual() {
   let en;
   let th;
   if (tracks.length) {
-    for (let i = 0; i < tracks.length; i++) {
-      if (tracks[i].srclang === "en") {
-        en = tracks[i];
-      } else if (tracks[i].srclang === "th-TH") {
-        th = tracks[i];
+    for (const element of tracks) {
+      if (element.srclang === "en") {
+        en = element;
+      } else if (element.srclang === "th-TH") {
+        th = element;
       }
     }
     if (en) {
@@ -18,11 +18,11 @@ async function openBilingual() {
         await sleep(500);
         let cues = en.track.cues;
         const cuesTextList = getCuesTextList(cues);
-        for (let i = 0; i < cuesTextList.length; i++) {
-          getTranslation(cuesTextList[i][1], (translatedText) => {
+        for (const element of cuesTextList) {
+          getTranslation(element[1], (translatedText) => {
             const translatedTextList = translatedText.split("\n\n");
             for (let j = 0; j < translatedTextList.length; j++) {
-              cues[cuesTextList[i][0] + j].text += "\n" + translatedTextList[j];
+              cues[element[0] + j].text += "\n" + translatedTextList[j];
             }
           });
         }
@@ -63,8 +63,8 @@ function getTranslation(words, callback) {
       if (xhr.status === 200 || xhr.status === 304) {
         const translatedList = JSON.parse(xhr.responseText)[0];
         let translatedText = "";
-        for (let i = 0; i < translatedList.length; i++) {
-          translatedText += translatedList[i][0];
+        for (const element of translatedList) {
+          translatedText += element[0];
         }
         callback(translatedText);
       }
